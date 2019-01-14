@@ -1,11 +1,12 @@
 from django.shortcuts import render
 
+from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework import viewsets
 
 from . import serializers
+from . import models
 
 # Create your views here.
 
@@ -17,11 +18,11 @@ class HelloApiView(APIView):
     def get(self, request, format=None):
         """Returns a list of APIView features."""
 
-        an_apiview= [
-            'Uses HTTP methods as functions (get, post, patch, put, delete)',
-            'Is similar to a traditional Django View',
+        an_apiview = [
+            'Uses HTTP methods as function (get, post, patch, put, delete)',
+            'It is similar to a traditional Django view',
             'Gives you the most control over your logic',
-            'Is mapped manually to URLs',
+            'Is mapped manually to URLs'
         ]
 
         return Response({'message': 'Hello!', 'an_apiview': an_apiview})
@@ -33,7 +34,7 @@ class HelloApiView(APIView):
 
         if serializer.is_valid():
             name = serializer.data.get('name')
-            message = 'Hello {0}!'.format(name)
+            message = 'Hello {0}'.format(name)
             return Response({'message': message})
         else:
             return Response(
@@ -45,17 +46,18 @@ class HelloApiView(APIView):
         return Response({'method': 'put'})
 
     def patch(self, request, pk=None):
-        """Patch request, onlyupdatesfields provided in the request."""
+        """Patch request, only updates fields provided in the request."""
 
         return Response({'method': 'patch'})
 
     def delete(self, request, pk=None):
-        """Deletes an object that exists."""
+        """Deletes and object."""
 
         return Response({'method': 'delete'})
 
+
 class HelloViewSet(viewsets.ViewSet):
-    """Test API ViewSet"""
+    """Test API ViewSet."""
 
     serializer_class = serializers.HelloSerializer
 
@@ -64,8 +66,8 @@ class HelloViewSet(viewsets.ViewSet):
 
         a_viewset = [
             'Uses actions (list, create, retrieve, update, partial_update)',
-            'Automatically maps to URLS using Routers',
-            'Provides more functionality with less code'
+            'Automatically maps to URLs using Routers',
+            'Provides more functionality with less code.'
         ]
 
         return Response({'message': 'Hello!', 'a_viewset': a_viewset})
@@ -102,3 +104,10 @@ class HelloViewSet(viewsets.ViewSet):
         """Handles removing an object."""
 
         return Response({'http_method': 'DELETE'})
+
+
+class UserProfileViewSet(viewsets.ModelViewSet):
+    """Handles creating, creating and updating profiles."""
+
+    serializer_class = serializers.UserProfileSerializer
+    queryset = models.UserProfile.objects.all()
